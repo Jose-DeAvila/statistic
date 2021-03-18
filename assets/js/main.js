@@ -1,1 +1,315 @@
-var dataObject={},max=0,min=0,resultR=0,resultM=0,numDatos=0,dataArray=[],intervalo=0;document.getElementById("btnCalc").addEventListener("click",t=>{0===numDatos?alert("Llene la tabla primero!"):(setOperationR(),setOperationM(),setOperationC(),setTable())}),document.getElementById("form").addEventListener("submit",t=>{t.preventDefault();var e=document.getElementById("input").value;""===e?alert("No pueden haber datos con 0"):(dataObject.hasOwnProperty(parseInt(e/10))?dataObject[parseInt(e/10)].push(e%10):dataObject[parseInt(e/10)]=[parseInt(e%10)],dataArray.push(e),numDatos+=1,max=dataArray.sort((t,e)=>e-t)[0],min=dataArray.sort((t,e)=>t-e)[0],setTree(),document.getElementById("form").reset())});const setOperationR=()=>{for(operationR=document.getElementById("operationR");operationR.hasChildNodes();)operationR.removeChild(operationR.firstChild);resultR=max-min;let t=document.createElement("p"),e=`\n    <p class="operationProcessR">R = ${max} - ${0===min?"0":min} = <span class="operationResultR">${max-min}</span></p>\n  `;t.innerHTML=e,operationR.appendChild(t)},setOperationC=()=>{for(operationC=document.getElementById("operationC");operationC.hasChildNodes();)operationC.removeChild(operationC.firstChild);resultC=resultR/resultM%1==0?resultR/resultM:parseInt(resultR/resultM)+1;let t=document.createElement("p"),e=`\n    <p class="operationProcessM">C = ${resultR} / ${resultM} = <span class="operationResultM">${resultR/resultM} ≈ ${resultC}</span></p>\n  `;t.innerHTML=e,operationC.appendChild(t)},setOperationM=()=>{for(operationM=document.getElementById("operationM");operationM.hasChildNodes();)operationM.removeChild(operationM.firstChild);resultM=(1+3.33*Math.log10(numDatos))%1==0?1+3.33*Math.log10(numDatos):1+3.33*Math.log10(numDatos)>parseInt(1+3.33*Math.log10(numDatos))+.5?parseInt(1+3.33*Math.log10(numDatos))+1:parseInt(1+3.33*Math.log10(numDatos));let t=document.createElement("p"),e=`\n    <p class="operationProcessM">M = 1 + 3.33log(${numDatos}) = <span class="operationResultM">${1+3.33*Math.log10(numDatos)} ≈ ${resultM}</span></p>\n  `;t.innerHTML=e,operationM.appendChild(t)},setTable=()=>{let t=[],e={},n=[],a=[],r=[],o=[],l=[];const s=document.getElementById("tbody-interval");for(;s.hasChildNodes();)s.removeChild(s.firstChild);var d=[parseInt(min)];for(let t=1;t<=resultM;t++)d.push(d[t-1]+resultC);for(let e=0;e<resultM;e++)t.push((d[e]+d[e+1])/2);auxArray=dataArray.sort((t,e)=>t-e);for(let t of dataArray)for(let n=0;n<resultM;n++)t>=d[n]&&t<d[n+1]?e[d[n]]=(e[d[n]]||0)+1:e[d[n]]=e[d[n]]||0;let i=Object.values(e);for(let t=0;t<i.length;t++)n[t]=(n[t-1]||0)+i[t];for(let t=0;t<i.length;t++)a[t]=i[t]/numDatos;for(let t=0;t<a.length;t++)r[t]=(r[t-1]||0)+a[t];for(let t=0;t<r.length;t++)o[t]=100*a[t];for(let t=0;t<o.length;t++)l[t]=(l[t-1]||0)+o[t];forInsertTableInterval=document.createElement("tr");for(let i=0;i<resultM;i++){let p=Object.values(e)[i],u=document.createElement("tr"),m=`\n      <tr>\n        <td>\n          [${d[i]} - ${d[i+1]})\n        </td>\n        <td>\n          ${t[i]}\n        </td>\n        <td>\n          ${p}\n        </td>\n        <td>\n          ${n[i]}\n        </td>\n        <td>\n          ${a[i]}\n        </td>\n        <td>\n          ${r[i]}\n        </td>\n        <td>\n          ${o[i]}%\n        </td>\n        <td>\n          ${l[i]}%\n        </td>\n      </tr>\n    `;u.innerHTML=m,s.appendChild(u)}},setTree=()=>{const t=document.getElementById("tbody");for(;t.hasChildNodes();)t.removeChild(t.firstChild);let e=Object.keys(dataObject);Object.values(dataObject);for(let n=0;n<e.length;n++){let a=Object.values(dataObject)[n].sort((t,e)=>t-e),r=document.createElement("tr"),o=`\n    <tr>\n      <td>\n        ${0==e[n]?a.toString():e[n]}\n      </td>\n      <td>\n        ${0==e[n]?"":a.toString()}\n      </td>\n    </tr>`;r.innerHTML=o,t.appendChild(r)}};
+var dataObject = {};
+var max = 0;
+var min = 0;
+var resultR = 0;
+var resultM = 0;
+var numDatos = 0;
+var dataArray = [];
+var intervalo = 0;
+var Xi=[];
+var ni={};
+var resultMedia;
+var resultVarianza;
+var sumLastRow = [];
+document.getElementById('btnCalc').addEventListener('click', (event) => {
+  if(numDatos === 0){
+    alert('Llene la tabla primero!');
+  }
+  else{
+    setOperationR();
+    setOperationM();
+    setOperationC();
+    setTable();
+    operationMediana();
+    setTableModa();
+    operationVarianza();
+    operationDesviacion();
+    operationMediana2();
+    operationModa();
+  }
+})
+
+document.getElementById('form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  var number = document.getElementById('input').value;
+  if(number === ''){
+    alert('No pueden haber datos con 0');
+  }
+  else{
+    if(dataObject.hasOwnProperty(parseInt(number/10))){
+      dataObject[parseInt(number/10)].push(number%10);
+    }
+    else{
+      dataObject[parseInt(number/10)] = [parseInt(number%10)];
+    }
+      dataArray.push(number);
+      numDatos += 1;
+      max = dataArray.sort((a,b) => b-a)[0];
+      min = dataArray.sort((a,b) => a-b)[0];
+      setTree();
+      document.getElementById('form').reset();
+    }
+});
+
+const setOperationR = () => {
+  operationR = document.getElementById('operationR');
+  while(operationR.hasChildNodes()){
+    operationR.removeChild(operationR.firstChild);
+  }
+  resultR = max-min;
+  let forInsertR = document.createElement('p');
+  let text = `
+    <p class="operationProcessR">R = ${max} - ${min === 0 ? '0' : min} = <span class="operationResultR">${max-min}</span></p>
+  `
+  forInsertR.innerHTML = text;
+  operationR.appendChild(forInsertR);
+}
+
+const setOperationC = () => {
+  operationC = document.getElementById('operationC');
+  while(operationC.hasChildNodes()){
+    operationC.removeChild(operationC.firstChild);
+  }
+  resultC = resultR / resultM % 1 === 0 ? resultR / resultM : parseInt(resultR/resultM)+1;
+  let forInsertC = document.createElement('p');
+  let text = `
+    <p class="operationProcessM">C = ${resultR} / ${resultM} = <span class="operationResultM">${resultR / resultM} ≈ ${resultC}</span></p>
+  `
+  forInsertC.innerHTML = text;
+  operationC.appendChild(forInsertC);
+}
+
+const setOperationM = () => {
+  operationM = document.getElementById('operationM');
+  while(operationM.hasChildNodes()){
+    operationM.removeChild(operationM.firstChild);
+  }
+  resultM = (1+3.33*Math.log10(numDatos)) % 1 === 0 ? 1+3.33*Math.log10(numDatos) : 1+3.33*Math.log10(numDatos) > parseInt(1+3.33*Math.log10(numDatos))+0.5 ? parseInt(1+3.33*Math.log10(numDatos))+1 : parseInt(1+3.33*Math.log10(numDatos))
+  let forInsertM = document.createElement('p');
+  let text = `
+    <p class="operationProcessM">M = 1 + 3.33log(${numDatos}) = <span class="operationResultM">${1+3.33*Math.log10(numDatos)} ≈ ${resultM}</span></p>
+  `
+  forInsertM.innerHTML = text;
+  operationM.appendChild(forInsertM);
+}
+
+const operationMediana = () => {
+  let operationMediana = document.getElementById('operationMediana');
+  while (operationMediana.hasChildNodes()){
+    operationMediana.removeChild(operationMediana.firstChild);
+  }
+  let auxModa = [];
+  let auxModaReduced = 0;
+  niValues = Object.values(ni);
+  for(let i = 0; i < Xi.length; i++){
+    auxModa.push(Xi[i]*niValues[i]);
+  }
+  auxModaReduced = auxModa.reduce((a,b) => a+b);
+  resultMedia = auxModaReduced/numDatos;
+  let forInsertModal = document.createElement('p');
+  let textP = `
+    <p class="operationProcessMedia"> <span>X</span> = Σ(Xi*ni)/${numDatos} = ${auxModaReduced}/${numDatos} = ${resultMedia}
+  `
+  forInsertModal.innerHTML = textP;
+  operationMediana.appendChild(forInsertModal);
+}
+
+const operationVarianza = () => {
+  let operationVarianza = document.getElementById('operationVarianza');
+  while(operationVarianza.hasChildNodes()) {
+    operationVarianza.removeChild(operationVarianza.firstChild);
+  }
+  let sumAllValues = sumLastRow.reduce((a,b) => a+b);
+  resultVarianza = sumAllValues/(numDatos-1);
+  let forInsertVarianza = document.createElement('p');
+  let textP = `
+    <p class="operationProcessVarianza">Varianza = Σni(Xi-<span>X</span>)²/${numDatos-1} = ${sumAllValues}/${numDatos-1} = ${resultVarianza}</p>
+  `
+  forInsertVarianza.innerHTML = textP;
+  operationVarianza.appendChild(forInsertVarianza);
+}
+
+const operationDesviacion = () => {
+  let operationDesviacion = document.getElementById('operationDesviacion');
+  while (operationDesviacion.hasChildNodes()){
+    operationDesviacion.removeChild(operationDesviacion.firstChild);
+  }
+  let forInsertDesviacion = document.createElement('p');
+  let textP = `
+    <p class="operationDesviacion">desviación: √varianza = √${resultVarianza} = ${Math.sqrt(resultVarianza)}</p>
+  `
+  forInsertDesviacion.innerHTML = textP;
+  operationDesviacion.appendChild(forInsertDesviacion);
+}
+
+const operationMediana2 = () => {
+  let operationMediana2 = document.getElementById('operationMediana2');
+  while (operationMediana2.hasChildNodes()){
+    operationMediana2.removeChild(operationMediana2.firstChild);
+  }
+  let forInsertMediana2= document.createElement('p');
+  let textP = `
+    <p class="operationMediana2">Datos: ${dataArray.toString()}</p>
+  `
+  forInsertMediana2.innerHTML = textP;
+  operationMediana2.appendChild(forInsertMediana2);
+  let resultMediana = document.getElementById('resultMediana');
+  let result = 0;
+  if(numDatos%2===0){
+    console.log('a');
+    result = (parseInt(dataArray[dataArray.length/2])+parseInt(dataArray[(dataArray.length/2)+1]))/2;
+  }
+  else{
+    console.log('b');
+    result = parseInt(dataArray[dataArray.length/2])+1;
+  }
+
+  let forInsertResultMediana = document.createElement('p');
+  let text = `
+    <p>Valor de la mediana: ${result}</p>
+  `
+  forInsertResultMediana.innerHTML = text;
+  resultMediana.appendChild(forInsertResultMediana);
+}
+
+const setTable = () => {
+  let Ni=[];
+  let fi=[];
+  let Fi=[];
+  let hi=[];
+  let Hii=[];
+  const tableBodyInterval = document.getElementById('tbody-interval');
+  while (tableBodyInterval.hasChildNodes()){
+    tableBodyInterval.removeChild(tableBodyInterval.firstChild);
+  }
+  let aux = [parseInt(min)];
+  for(let i = 1; i<=resultM; i++){
+    aux.push(aux[i-1]+resultC);
+  }
+  for(let i = 0; i<resultM; i++){
+    Xi.push((aux[i]+aux[i+1])/2);
+  }
+  auxArray = dataArray.sort((a,b) => a-b);
+  for(let x of dataArray){
+    for(let i = 0; i<resultM; i++){
+      if(x>=aux[i] && x<aux[i+1]){
+        ni[aux[i]]=(ni[aux[i]] || 0) + 1;
+      }
+      else{
+        ni[aux[i]]=(ni[aux[i]] || 0); 
+      }
+    }
+  }
+  let valuesni = Object.values(ni);
+  for(let i = 0; i<valuesni.length; i++){
+    Ni[i] = (Ni[i-1] || 0) + valuesni[i];
+  }
+  for(let i = 0; i<valuesni.length; i++){
+    fi[i] = valuesni[i]/numDatos;
+  }
+  for(let i = 0; i<fi.length; i++){
+    Fi[i] = (Fi[i-1] || 0) + fi[i];
+  }
+  for(let i = 0; i<Fi.length; i++){
+    hi[i] = fi[i]*100;
+  }
+  for(let i = 0; i<hi.length; i++){
+    Hii[i] = (Hii[i-1] || 0) + hi[i];
+  }
+  for(let i = 0; i<resultM; i++){
+    let valuesOfKeyni = Object.values(ni)[i];
+    let forInsertTableInterval = document.createElement('tr');
+    let text = `
+      <tr>
+        <td>
+          [${aux[i]} - ${aux[i+1]})
+        </td>
+        <td>
+          ${Xi[i]}
+        </td>
+        <td>
+          ${valuesOfKeyni}
+        </td>
+        <td>
+          ${Ni[i]}
+        </td>
+        <td>
+          ${fi[i]}
+        </td>
+        <td>
+          ${Fi[i]}
+        </td>
+        <td>
+          ${hi[i]}%
+        </td>
+        <td>
+          ${Hii[i]}%
+        </td>
+      </tr>
+    `
+    forInsertTableInterval.innerHTML = text;
+    tableBodyInterval.appendChild(forInsertTableInterval);
+  }
+  
+}
+
+const setTableModa = () => {
+  let tbodyModa = document.getElementById('tbody-moda');
+  let aux = [parseInt(min)];
+  for(let i = 1; i<=resultM; i++){
+    aux.push(aux[i-1]+resultC);
+  }
+  for(let i = 0; i<resultM; i++){
+    let valuesOfKeyni = Object.values(ni)[i];
+    sumLastRow.push(valuesOfKeyni*Math.pow(Xi[i]-resultMedia, 2));
+    let forInsertTableModal = document.createElement('tr');
+    let text = `
+      <tr>
+        <td>
+          [${aux[i]} - ${aux[i+1]})
+        </td>
+        <td>
+          ${Xi[i]}
+        </td>
+        <td>
+          ${valuesOfKeyni}
+        </td>
+        <td>
+          ${Xi[i]-resultMedia}
+        </td>
+        <td>
+          ${Math.pow(Xi[i]-resultMedia, 2)}
+        </td>
+        <td>
+          ${sumLastRow[i]}
+        </td>
+      </tr>
+    `
+    forInsertTableModal.innerHTML = text;
+    tbodyModa.appendChild(forInsertTableModal);
+  }
+}
+
+const setTree = () => {
+  const tableBody = document.getElementById('tbody');
+  while(tableBody.hasChildNodes()){
+    tableBody.removeChild(tableBody.firstChild);
+  }
+  let keys = Object.keys(dataObject);
+  let values = Object.values(dataObject);
+  for(let i = 0; i<keys.length; i++){
+    let valuesOfKey = Object.values(dataObject)[i].sort((a,b) => a-b);
+    let forInsert = document.createElement('tr');
+    let text = `
+    <tr>
+      <td>
+        ${keys[i] == 0 ? valuesOfKey.toString() : keys[i]}
+      </td>
+      <td>
+        ${keys[i] == 0 ? '' : valuesOfKey.toString()}
+      </td>
+    </tr>`
+    forInsert.innerHTML = text;
+    tableBody.appendChild(forInsert);
+  }
+}

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Statistic Program</title>
+  <link rel="stylesheet" href="assets/css/style.css" media="all">
 </head>
 <body>
   <form action="" id="form" >
@@ -53,6 +54,40 @@
     <tbody id="tbody-interval">
     </tbody>
   </table>
+  <div class="media">
+    <img src="assets/img/media_formula.PNG" alt="Media fórmula">
+    <div id="operationMediana"></div>
+  </div>
+  <table border=1>
+    <thead>
+      <tr>
+        <th>Intervalos</th>
+        <th>Xi</th>
+        <th>ni</th>
+        <th>Xi-<span>X</span></th>
+        <th>(Xi-<span>X</span>)²</th>
+        <th>ni(Xi-<span>X</span>)²</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-moda"></tbody>
+  </table>
+  <div class="varianza">
+    <img src="assets/img/varianza_formula.PNG" alt="Varianza Fórmula">
+    <div id="operationVarianza"></div>
+  </div>
+  <div class="desviacion">
+    <img src="assets/img/desviacion_formula.PNG" alt="Desviación Fórmula">
+    <div id="operationDesviacion"></div>
+  </div>
+  <div class="mediana">
+    <h2>Mediana</h2>
+    <div id="operationMediana2"></div>
+    <div id="resultMediana"></div>
+  </div>
+  <div class="moda">
+    <h2>Moda</h2>
+    <div class="resultModa"></div>
+  </div>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
