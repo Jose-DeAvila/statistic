@@ -11,11 +11,14 @@ var ni={};
 var resultMedia;
 var resultVarianza;
 var sumLastRow = [];
+var moda = 0;
+
 document.getElementById('btnCalc').addEventListener('click', (event) => {
   if(numDatos === 0){
     alert('Llene la tabla primero!');
   }
   else{
+    document.querySelector('.results').style.display = 'block';
     setOperationR();
     setOperationM();
     setOperationC();
@@ -31,9 +34,11 @@ document.getElementById('btnCalc').addEventListener('click', (event) => {
 
 document.getElementById('form').addEventListener('submit', (event) => {
   event.preventDefault();
-  var number = document.getElementById('input').value;
-  if(number === ''){
+  var input = document.getElementById('input');
+  var number = input.value;
+  if(number === '' || number == 0){
     alert('No pueden haber datos con 0');
+    input.value = "";
   }
   else{
     if(dataObject.hasOwnProperty(parseInt(number/10))){
@@ -156,12 +161,10 @@ const operationMediana2 = () => {
   let resultMediana = document.getElementById('resultMediana');
   let result = 0;
   if(numDatos%2===0){
-    console.log('a');
-    result = (parseInt(dataArray[dataArray.length/2])+parseInt(dataArray[(dataArray.length/2)+1]))/2;
+    result = parseInt((parseInt(dataArray[dataArray.length/2])+parseInt(dataArray[(dataArray.length/2)+1]))/2);
   }
   else{
-    console.log('b');
-    result = parseInt(dataArray[dataArray.length/2])+1;
+    result = parseInt(dataArray[parseInt(dataArray.length/2)]);
   }
 
   let forInsertResultMediana = document.createElement('p');
@@ -170,6 +173,31 @@ const operationMediana2 = () => {
   `
   forInsertResultMediana.innerHTML = text;
   resultMediana.appendChild(forInsertResultMediana);
+}
+
+const operationModa = () => {
+  let numbersRepeat = {};
+  let aux = 0;
+  
+  resultModa = document.getElementById('resultModa');
+
+  dataArray.forEach((number) => {
+    numbersRepeat[number] = (numbersRepeat[number] || 0) + 1;
+  });
+
+  for(let key in numbersRepeat) {
+    if(numbersRepeat[key]>aux){
+      aux = numbersRepeat[key];
+      moda = key;
+    }
+  }
+  console.log(numbersRepeat);
+  let forInsertResultModa = document.createElement('p');
+  let text = `
+    <p>Valor de la moda: ${moda}</p>
+  `
+  forInsertResultModa.innerHTML = text;
+  resultModa.appendChild(forInsertResultModa);
 }
 
 const setTable = () => {
