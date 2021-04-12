@@ -3,90 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <title>Statistic Program</title>
+  <link rel="stylesheet" href="assets/css/normalize.css" media="all">
   <link rel="stylesheet" href="assets/css/style.css" media="all">
 </head>
 <body>
-  <form action="" id="form" >
-    <input id="input" type="number" name="number">
-    <input type="submit" value="agregar" class="btnEnviar" id="btnEnviar" />
-  </form>
-  <h1>Valores</h1>
-  <table border=1>
-    <thead>
-      <tr>
-        <th>Tallo</th>
-        <th>Hojas</th>
-      </tr>
-    </thead>
-    <tbody id="tbody">
-    </tbody>
-  </table>
-  <button id="btnCalc">Calcular</button>
-  <div class="r">
-    <img src="assets/img/min-max_formula.PNG" alt="Min Max Fórmula">
-    <div class="operationR" id="operationR">
+  <h1 class="title">Statistic program</h1>
+  <div class="formandtable">
+    <form action="" id="form" >
+      <input id="input" class="numberInput" type="number" name="number">
+      <input type="submit" value="agregar" class="btnEnviar" id="btnEnviar" />
+    </form>
+    <h2 class="titleSection">Valores</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tallo</th>
+          <th>Hojas</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+    <button id="btnCalc">Calcular</button>
+  </div>
+  <div class="results">
+    <div class="r">
+      <img src="assets/img/min-max_formula.PNG" alt="Min Max Fórmula">
+      <div class="operationR" id="operationR"></div>
+    </div> 
+    <div class="m">
+      <img src="assets/img/m_formula.PNG" alt="Num Filas Fórmula">
+      <div class="operationM" id="operationM"></div>
     </div>
-  </div> 
-  <div class="m">
-    <img src="assets/img/m_formula.PNG" alt="Num Filas Fórmula">
-    <div class="operationM" id="operationM">
+    <div class="c">
+      <img src="assets/img/amplitud_formula.PNG" alt="Num Filas Fórmula">
+      <div class="operationC" id="operationC"></div>
     </div>
-  </div>
-  <div class="c">
-    <img src="assets/img/amplitud_formula.PNG" alt="Num Filas Fórmula">
-    <div class="operationC" id="operationC">
+    <h2 class="titleSection">Tabla de intervalos</h2>
+    <table border=1>
+      <thead>
+        <tr>
+          <th>Intervalos</th>
+          <th>Xi</th>
+          <th>ni</th>
+          <th>Ni</th>
+          <th>fi</th>
+          <th>Fi</th>
+          <th>hi</th>
+          <th>Hi</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-interval">
+      </tbody>
+    </table>
+    <div class="media">
+      <img src="assets/img/media_formula.PNG" alt="Media fórmula">
+      <div id="operationMediana"></div>
     </div>
-  </div>
-  <h2>Tabla de intervalos</h2>
-  <table border=1>
-    <thead>
-      <tr>
-        <th>Intervalos</th>
-        <th>Xi</th>
-        <th>ni</th>
-        <th>Ni</th>
-        <th>fi</th>
-        <th>Fi</th>
-        <th>hi</th>
-        <th>Hi</th>
-      </tr>
-    </thead>
-    <tbody id="tbody-interval">
-    </tbody>
-  </table>
-  <div class="media">
-    <img src="assets/img/media_formula.PNG" alt="Media fórmula">
-    <div id="operationMediana"></div>
-  </div>
-  <table border=1>
-    <thead>
-      <tr>
-        <th>Intervalos</th>
-        <th>Xi</th>
-        <th>ni</th>
-        <th>Xi-<span>X</span></th>
-        <th>(Xi-<span>X</span>)²</th>
-        <th>ni(Xi-<span>X</span>)²</th>
-      </tr>
-    </thead>
-    <tbody id="tbody-moda"></tbody>
-  </table>
-  <div class="varianza">
-    <img src="assets/img/varianza_formula.PNG" alt="Varianza Fórmula">
-    <div id="operationVarianza"></div>
-  </div>
-  <div class="desviacion">
-    <img src="assets/img/desviacion_formula.PNG" alt="Desviación Fórmula">
-    <div id="operationDesviacion"></div>
-  </div>
-  <div class="mediana">
-    <h2>Mediana</h2>
-    <div id="operationMediana2"></div>
-    <div id="resultMediana"></div>
-  </div>
-  <div class="moda">
-    <h2>Moda</h2>
-    <div class="resultModa"></div>
+    <table border=1>
+      <thead>
+        <tr>
+          <th>Intervalos</th>
+          <th>Xi</th>
+          <th>ni</th>
+          <th>Xi-<span>X</span></th>
+          <th>(Xi-<span>X</span>)²</th>
+          <th>ni(Xi-<span>X</span>)²</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-moda"></tbody>
+    </table>
+    <div class="varianza">
+      <img src="assets/img/varianza_formula.PNG" alt="Varianza Fórmula">
+      <div id="operationVarianza"></div>
+    </div>
+    <div class="desviacion">
+      <img src="assets/img/desviacion_formula.PNG" alt="Desviación Fórmula">
+      <div id="operationDesviacion"></div>
+    </div>
+    <div class="mediana">
+      <h2 class="titleSection">Mediana</h2>
+      <div id="operationMediana2"></div>
+      <div id="resultMediana"></div>
+    </div>
+    <div class="moda">
+      <h2 class="titleSection">Moda</h2>
+      <div id="resultModa"></div>
+    </div>
   </div>
 <script src="assets/js/main.js"></script>
 </body>
