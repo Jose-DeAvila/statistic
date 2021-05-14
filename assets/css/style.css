@@ -45,7 +45,7 @@ span::before{
 .formandtable table thead{
   background-color: black;
   color: white;
-  border-bottom: 5px solid red;
+  border-bottom: 5px solid blue;
 }
 
 th, td{
