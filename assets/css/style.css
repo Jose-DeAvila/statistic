@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+
 body{
   font-size: 1.3rem;
+  font-family: 'Oxygen', sans-serif;
+  background-color: #f7f7f7;
 }
 
 span{
@@ -18,4 +22,33 @@ span::before{
 
 .operationMediana2 {
   word-wrap: break-word;
+}
+
+.results{
+  display: none;
+  padding: 15px;
+}
+
+.title{
+  text-align: center;
+  font-weight: 700;
+}
+
+.formandtable{
+  text-align: center;
+}
+
+.formandtable table{
+  margin: 10px auto;
+}
+
+.formandtable table thead{
+  background-color: black;
+  color: white;
+  border-bottom: 5px solid blue;
+}
+
+th, td{
+  padding: 5px 10px;
+  border-right: 2px solid black;
 }
